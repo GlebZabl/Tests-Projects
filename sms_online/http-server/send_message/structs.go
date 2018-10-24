@@ -6,12 +6,13 @@ import (
 )
 
 type Message struct {
-	Text string `json:"text"`
+	Text          string `json:"text"`
+	GetByHTTPDate int64  `json:"get_date"`
 }
 
 type Response struct {
-	Status  bool    `json:"status"`
-	Message string  `json:"message"`
+	Status  bool   `json:"status"`
+	Message string `json:"message"`
 }
 
 func (r *Response) send(res http.ResponseWriter) {
