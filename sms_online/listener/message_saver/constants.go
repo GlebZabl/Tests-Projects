@@ -11,6 +11,8 @@ const(
 
 var(
 	DBConnectionString string
+	QueueConnectionString = "amqp://zabl:1334216@192.168.56.101:5672/"
+	QueueName = "mainqueue"
 )
 
 func init() {

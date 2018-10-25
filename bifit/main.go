@@ -3,41 +3,31 @@ package main
 import (
 	. "Tests-Projects/bifit/structs"
 	"fmt"
+	"strconv"
 )
 
 func main() {
-	err, result := loadFile("source.txt")
+	parser:= FileParser{FieldSize:2}
+	err,result := parser.Parse("./source.txt")
 
-	if err != nil || !check(result) {
-		fmt.Println("wrong field format!")
-		return
+	if err == nil{
+		printOut(result)
 	}
-
-	counter := Counter{Source: result}
-	result = counter.Count()
-	printOut(result)
 }
 
-func loadFile(path string) (error, [][]string) {
-	parser := new(FileParcer)
-	err, result := parser.Parse(path)
-	return err, result
-}
 
-func printOut(data [][]string) {
+func printOut(data [][]int) {
 	for hIndex := 0; hIndex < len(data); hIndex++ {
 		for vIndex := 0; vIndex < len(data); vIndex++ {
-			fmt.Print(" " + data[hIndex][vIndex] + "")
+			var temp string
+			if data[hIndex][vIndex] == -1{
+				temp = "X"
+			}else {
+				temp = strconv.Itoa(data[hIndex][vIndex])
+			}
+			fmt.Print("  " + temp + "  ")
 		}
 		fmt.Println()
 	}
 }
 
-func check(data [][]string) bool {
-	for index := range data {
-		if len(data[index]) != len(data) {
-			return false
-		}
-	}
-	return true
-}

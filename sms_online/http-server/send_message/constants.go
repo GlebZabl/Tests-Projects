@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	confPath = "http-server/config.txt"
+	confPath = "./config.txt"
 )
 
 var (
