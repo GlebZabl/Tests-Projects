@@ -6,7 +6,7 @@ import (
 )
 
 const(
-	confPath = "./config.txt"
+	confPath = "listener/config.txt"
 )
 
 var(
