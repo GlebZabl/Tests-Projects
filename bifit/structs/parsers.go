@@ -240,6 +240,9 @@ func (l *lineParser) listenReady() {
 
 //получаем статус(можно ли закрыть поток обрабатывающий строку)
 func (l *lineParser) getStatus() bool {
+	if l.fieldSize == 0{
+		return true
+	}
 	if l.lineNumber == 0 {
 		return l.statuses[1] && l.statuses[2]
 	}
