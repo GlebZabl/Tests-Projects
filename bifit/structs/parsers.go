@@ -6,43 +6,45 @@ import (
 )
 
 type chanSet struct {
-	Highter     chan int
-	Self        chan int
-	Lower       chan int
-	StopHighter chan bool
-	StopSelf    chan bool
-	StopLower   chan bool
+	Higher     chan int
+	Self       chan int
+	Lower      chan int
+	StopHigher chan bool
+	StopSelf   chan bool
+	StopLower  chan bool
 }
 
 type fullSet struct {
-	from chanSet
-	to   chanSet
+	from chanSet //каналы для отправки
+	to   chanSet //каналы для получения
 }
 
 var (
-	chanelsMap map[int]*fullSet
+	channelsMap map[int]*fullSet
 )
-
+//структура которую возвращает lineparser
 type stopChanStruct struct {
 	lineNumber int
 	data       []int
 	err        bool
 }
 
+//структура для обработки файла
 type FileParser struct {
 	scanner    *bufio.Scanner
-	parsers    int
-	stopChanel chan stopChanStruct
-	result     [][]int
-	FieldSize  int
+	parsers    int                 //кол-во работающих обработчиков строк
+	stopChanel chan stopChanStruct //канал для получения результата от обработчиков строк
+	result     [][]int             //результат
+	FieldSize  int                 //размер одной стороны поля
 }
 
-func (f *FileParser) Parse(path string) (error, [][]int) {
-	chanelsMap = make(map[int]*fullSet)
+//сканирует и обсчитывает файл
+func (f *FileParser) Parse(path string) (bool, [][]int) {
+	channelsMap = make(map[int]*fullSet)
 
 	file, err := os.Open(path)
 	if err != nil {
-		return err, nil
+		return true, nil
 	}
 	defer file.Close()
 
@@ -50,41 +52,54 @@ func (f *FileParser) Parse(path string) (error, [][]int) {
 	f.parsers = 0
 	f.stopChanel = make(chan stopChanStruct)
 
-	return f.startScaning()
+	return f.startScanning()
 }
 
 //запускает сканирование
-func (f *FileParser) startScaning() (error, [][]int) {
+func (f *FileParser) startScanning() (bool, [][]int) {
 	for f.scanner.Scan() {
 		f.prepareChans()
-		parser := lineParser{fieldSize: f.FieldSize, lineNumber: f.parsers, result: *new([]int), geted: *new([]int), resultChan: f.stopChanel, statuses: []bool{false, false, false}, inputChans: &chanelsMap[f.parsers].from, outputChans: &chanelsMap[f.parsers].to}
-		for i := 0;i<=f.FieldSize;i++{
-			parser.geted =  append(parser.geted, 0)
+		parser := lineParser{fieldSize: f.FieldSize, lineNumber: f.parsers, result: *new([]int), geted: *new([]int), resultChan: f.stopChanel, statuses: []bool{false, false, false}, inputChans: &channelsMap[f.parsers].from, outputChans: &channelsMap[f.parsers].to}
+
+		for i := 0; i <= f.FieldSize; i++ {
+			parser.geted = append(parser.geted, 0)
 		}
+
 		f.parsers += 1
 		go parser.listen()
 		go parser.listenReady()
 		go parser.parse(f.scanner.Text())
 	}
+	if f.parsers != f.FieldSize+1 {
+		return true, nil
+	}
+
 	for i := 0; i < f.parsers; i++ {
 		f.result = append(f.result, []int{})
 	}
+
+	return f.waitScanning()
+}
+
+//ждём пока завершат работу все обработчики
+func (f *FileParser) waitScanning() (bool, [][]int) {
 	for {
 		select {
 		case end := <-f.stopChanel:
 			if end.err {
-				return *new(error), nil
+				return true, nil
 			} else {
 				f.parsers -= 1
 				f.result[end.lineNumber] = end.data
 				if f.parsers == 0 {
-					return nil, f.result
+					return false, f.result
 				}
 			}
 		}
 	}
 }
 
+//готовим элемент карты для обработчика
 func (f *FileParser) prepareChans() {
 	self := make(chan int)
 	stopself := make(chan bool)
@@ -93,34 +108,34 @@ func (f *FileParser) prepareChans() {
 		temp := fullSet{}
 		temp.to = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool)}
 		temp.from = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool)}
-		chanelsMap[f.parsers] = &temp
+		channelsMap[f.parsers] = &temp
 		return
 	}
 
 	if f.parsers == f.FieldSize {
 		temp := fullSet{}
-		temp.to = chanSet{Self: self, StopSelf: stopself, Highter: chanelsMap[f.parsers-1].from.Lower, StopHighter: chanelsMap[f.parsers-1].from.StopLower}
-		temp.from = chanSet{Self: self, StopSelf: stopself, Highter: chanelsMap[f.parsers-1].to.Lower, StopHighter: chanelsMap[f.parsers-1].to.StopLower}
-		chanelsMap[f.parsers] = &temp
+		temp.to = chanSet{Self: self, StopSelf: stopself, Higher: channelsMap[f.parsers-1].from.Lower, StopHigher: channelsMap[f.parsers-1].from.StopLower}
+		temp.from = chanSet{Self: self, StopSelf: stopself, Higher: channelsMap[f.parsers-1].to.Lower, StopHigher: channelsMap[f.parsers-1].to.StopLower}
+		channelsMap[f.parsers] = &temp
 		return
 	}
 
 	temp := fullSet{}
-	temp.to = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool), Highter: chanelsMap[f.parsers-1].from.Lower, StopHighter: chanelsMap[f.parsers-1].from.StopLower}
-	temp.from = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool), Highter: chanelsMap[f.parsers-1].to.Lower, StopHighter: chanelsMap[f.parsers-1].to.StopLower}
-	chanelsMap[f.parsers] = &temp
+	temp.to = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool), Higher: channelsMap[f.parsers-1].from.Lower, StopHigher: channelsMap[f.parsers-1].from.StopLower}
+	temp.from = chanSet{Self: self, StopSelf: stopself, Lower: make(chan int), StopLower: make(chan bool), Higher: channelsMap[f.parsers-1].to.Lower, StopHigher: channelsMap[f.parsers-1].to.StopLower}
+	channelsMap[f.parsers] = &temp
 }
 
 //обработчик строки
 type lineParser struct {
-	fieldSize   int
-	lineNumber  int
-	result      []int
-	geted       []int
-	outputChans *chanSet
-	inputChans  *chanSet
-	resultChan  chan stopChanStruct
-	statuses    []bool
+	fieldSize   int                 //размер поля(одной стороны)
+	lineNumber  int                 //номер обрабатываемой строки
+	result      []int               //результат обработки строки
+	geted       []int               //информация о бомбах от обработчиков соседних строк
+	outputChans *chanSet            //каналы для откправки сигналов
+	inputChans  *chanSet            //каналы для прослушивания сигналов
+	resultChan  chan stopChanStruct //канал для отправки результата
+	statuses    []bool              //статусы завершения обработчиков(этого и двух соседних)
 }
 
 //обрабатываем строчку
@@ -132,11 +147,15 @@ func (l *lineParser) parse(line string) {
 		}
 		if line[i:i+1] == "X" {
 			l.result = append(l.result, -1)
-			l.sendSignals(len(l.result)-1)
+			l.sendSignals(len(l.result) - 1)
 		}
 		if line[i:i+1] != " " && line[i:i+1] != "X" && line[i:i+1] != "O" {
 			err = true
 		}
+	}
+
+	if len(l.result) != l.fieldSize+1 {
+		err = true
 	}
 
 	result := stopChanStruct{data: l.result, lineNumber: l.lineNumber, err: err}
@@ -151,7 +170,7 @@ func (l *lineParser) parse(line string) {
 func (l *lineParser) sendSignals(index int) {
 	if l.lineNumber != 0 {
 		for i := index - 1; i <= index+1; i++ {
-			l.outputChans.Highter <- i
+			l.outputChans.Higher <- i
 		}
 	}
 	if l.lineNumber != l.fieldSize {
@@ -166,7 +185,7 @@ func (l *lineParser) sendSignals(index int) {
 //отправляем сообщения о том что завершили работу обработчикам соседних строчек
 func (l *lineParser) sendFinish() {
 	if l.lineNumber != 0 {
-		l.outputChans.StopHighter <- true
+		l.outputChans.StopHigher <- true
 	}
 	if l.lineNumber != l.fieldSize {
 		l.outputChans.StopLower <- true
@@ -178,7 +197,7 @@ func (l *lineParser) sendFinish() {
 func (l *lineParser) listen() {
 	for {
 		select {
-		case index := <-l.inputChans.Highter:
+		case index := <-l.inputChans.Higher:
 			if index != -1 && index <= l.fieldSize {
 				l.geted[index] += 1
 			}
@@ -200,7 +219,7 @@ func (l *lineParser) listen() {
 func (l *lineParser) listenReady() {
 	for {
 		select {
-		case <-l.inputChans.StopHighter:
+		case <-l.inputChans.StopHigher:
 			l.statuses[0] = true
 			if l.getStatus() {
 				l.resultChan <- stopChanStruct{data: l.finalCount(), err: false, lineNumber: l.lineNumber}
