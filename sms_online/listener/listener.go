@@ -8,6 +8,7 @@ func main() {
 	reloadchan := make(chan bool)
 	go Listen(reloadchan)
 
+	//поднимаем заново если упало соединение с менеджером очередей
 	for {
 		select {
 		case <-reloadchan:
