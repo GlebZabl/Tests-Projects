@@ -15,6 +15,7 @@ type Response struct {
 	Message string `json:"message"`
 }
 
+//ф-ия отправки ответа клиенту
 func (r *Response) send(res http.ResponseWriter) {
 	QuData, err := json.Marshal(r)
 	if err != nil {
@@ -22,6 +23,10 @@ func (r *Response) send(res http.ResponseWriter) {
 		r.Message = err.Error()
 	}
 	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
+	if r.Status {
+		res.WriteHeader(http.StatusOK)
+	} else {
+		res.WriteHeader(http.StatusBadGateway)
+	}
 	res.Write(QuData)
 }

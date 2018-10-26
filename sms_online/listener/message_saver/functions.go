@@ -2,10 +2,10 @@ package message_saver
 
 import (
 	"encoding/json"
-	"fmt"
 	"src/github.com/streadway/amqp"
 )
 
+//функция опрашивающая очередь
 func Listen(reload chan bool)  {
 	conn, err := amqp.Dial(QueueConnectionString)
 	if err != nil{
@@ -23,24 +23,31 @@ func Listen(reload chan bool)  {
 
 	defer chanel.Close()
 
-	msgs, err := chanel.Consume(
-		QueueName, // queue
-		"",     // consumer
-		true,   // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
+	for{
+		msgs, err := chanel.Consume(
+			QueueName,
+			"",
+			true,
+			false,
+			false,
+			false,
+			nil,
+		)
 
-	for msg := range msgs{
-		data := Message{}
-		err = json.Unmarshal(msg.Body,data)
-		SaveMessage(data)
+		if err != nil{
+			reload<-true
+			return
+		}
+
+		for msg := range msgs{
+			data := new(Message)
+			err = json.Unmarshal([]byte(string(msg.Body)),data)
+			SaveMessage(*data)
+		}
 	}
-	fmt.Println(msgs)
 }
 
+//функция отвечающая за сохранение сообщение в бд или возврат его в очередь
 func SaveMessage(msg Message)  {
 		if  InsertMessage(msg) == nil{
 			return
@@ -49,6 +56,36 @@ func SaveMessage(msg Message)  {
 		}
 }
 
+//функция отвечающая за возврат необработанного сообщения в очередь
 func beckToQueue(msg Message){
-	return
+	QuData := msg
+
+	jsonData, err := json.Marshal(QuData)
+	if err != nil{
+		return
+	}
+
+	conn, err := amqp.Dial(QueueConnectionString)
+	if err != nil{
+		return
+	}
+
+	defer conn.Close()
+
+	chanel,err := conn.Channel()
+	if err!=nil {
+		return
+	}
+
+	defer chanel.Close()
+
+	err = chanel.Publish(
+		"",
+		QueueName,
+		false,
+		false,
+		amqp.Publishing {
+			ContentType: "application/json",
+			Body:        jsonData,
+		})
 }

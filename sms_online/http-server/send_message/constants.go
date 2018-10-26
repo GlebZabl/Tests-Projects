@@ -1,8 +1,8 @@
 package send_message
 
 import (
-	"fmt"
-	"io/ioutil"
+	"bufio"
+	"os"
 )
 
 const (
@@ -16,15 +16,22 @@ var (
 )
 
 func init() {
-	QueueConnectionString = loadQueueConectionString()
-	QueueName = "mainqueue"
+	QueueConnectionString, QueueName = loadQueueConectionString(confPath)
 	ErrMsg = "service is temporary unavailable"
 }
 
-func loadQueueConectionString() string {
-	b, err := ioutil.ReadFile(confPath)
+//загружаем из конфигурационного файла
+func loadQueueConectionString(path string) (string, string) {
+	result := *new([]string)
+	file, err := os.Open(path)
 	if err != nil {
-		fmt.Print(err)
+		return "", ""
 	}
-	return string(b)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		result = append(result, scanner.Text())
+	}
+	return result[0], result[1]
 }

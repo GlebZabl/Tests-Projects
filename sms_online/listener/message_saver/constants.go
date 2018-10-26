@@ -1,28 +1,36 @@
 package message_saver
 
 import (
-	"fmt"
-	"io/ioutil"
+	"bufio"
+	"os"
 )
 
-const(
-	confPath = "listener/config.txt"
+const (
+	confPath = "./config.txt"
 )
 
-var(
-	DBConnectionString string
-	QueueConnectionString = "amqp://zabl:1334216@192.168.56.101:5672/"
-	QueueName = "mainqueue"
+var (
+	DBConnectionString    string //строка для подключения к бд
+	QueueConnectionString string //строка для подключения к менеджеру очередей
+	QueueName             string //название очереди
 )
 
 func init() {
-	DBConnectionString = loadDbConectionString(confPath)
+	DBConnectionString, QueueConnectionString, QueueName = loadConfig(confPath)
 }
 
-func loadDbConectionString(path string) string {
-	b, err := ioutil.ReadFile(path)
+//грузим переменные из файла конфига
+func loadConfig(path string) (string, string, string) {
+	result := *new([]string)
+	file, err := os.Open(path)
 	if err != nil {
-		fmt.Print(err)
+		return "", "", ""
 	}
-	return string(b)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		result = append(result, scanner.Text())
+	}
+	return result[0], result[1], result[2]
 }

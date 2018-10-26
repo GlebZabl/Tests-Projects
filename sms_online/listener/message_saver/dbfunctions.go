@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+//функция отвечающая за вставку сообщения в бд
 func InsertMessage(msg Message) error  {
 	db, err := sql.Open("mysql", DBConnectionString)
 	if err != nil {

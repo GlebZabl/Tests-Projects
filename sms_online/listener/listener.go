@@ -4,7 +4,14 @@ import (
 	. "Tests-Projects/sms_online/listener/message_saver"
 )
 
-func main(){
+func main() {
 	reloadchan := make(chan bool)
-	Listen(reloadchan)
+	go Listen(reloadchan)
+
+	for {
+		select {
+		case <-reloadchan:
+			go	Listen(reloadchan)
+		}
+	}
 }
