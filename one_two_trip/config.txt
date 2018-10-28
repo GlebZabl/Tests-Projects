@@ -1,0 +1,7 @@
+localhost
+6379
+
+7
+messagesQueue
+errorsQueue
+chanel
