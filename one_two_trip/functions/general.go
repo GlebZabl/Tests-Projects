@@ -7,19 +7,22 @@ import (
 
 //c 5ти процентной вероятностью возвращает ошибку
 func GetError() bool {
+	return false
 	random := rand.Intn(19)
 	return random == 0
 }
 
-func GetRandomString() string  {
-	return strconv.Itoa(rand.Int())+strconv.Itoa(rand.Int())+strconv.Itoa(rand.Int())
+//генерирует рандомную строчку
+func GetRandomString() string {
+	return strconv.Itoa(rand.Int()) + strconv.Itoa(rand.Int()) + strconv.Itoa(rand.Int())
+}
+
+//читаем очередь ошибок
+func ReadErrors() {
 
 }
 
-func ReadErrors()  {
-
-}
-
-func GetMode() bool  {
+//возвращает режим работы
+func GetMode() bool {
 	return false
 }

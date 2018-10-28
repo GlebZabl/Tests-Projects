@@ -13,7 +13,7 @@ func main() {
 }
 
 func consume(name string) {
-	testQueue := redismq.CreateQueue("localhost", "6379", "", 1, "tasks")
+	testQueue := redismq.CreateQueue("localhost", "6379", "", 6, "newQueue")
 	consumer, err := testQueue.AddConsumer(name)
 	if err != nil {
 		panic(err)

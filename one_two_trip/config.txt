@@ -1,7 +1,7 @@
 localhost
 6379
 
-7
-messagesQueue
+6
+tasksQueue
 errorsQueue
 chanel

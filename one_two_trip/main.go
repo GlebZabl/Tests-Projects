@@ -15,32 +15,35 @@ func main() {
 	if GetMode() {
 		ReadErrors()
 	} else {
+		//подключаемся к очередям
 		tasksQueue := redismq.CreateQueue(RedisConString, RedisPort, RedisPassword, RedisDbNumber, TasksQueueName)
 		errQueue := redismq.CreateQueue(RedisConString, RedisPort, RedisPassword, RedisDbNumber, ErrQueueName)
+
 		name, err := uuid.NewV4()
 		cnsmr, err := tasksQueue.AddConsumer(name.String())
 		if err != nil {
 			return
 		}
 
-		port, err:= strconv.Atoi(RedisPort)
-		if err!= nil{
+		port, err := strconv.Atoi(RedisPort)
+		if err != nil {
 			return
 		}
 
+		//создаём клиент для прослушивания канала
 		chanelClient := redis.NewClient(&redis.Options{
-			Network: "tcp",
-			Addr:     fmt.Sprintf("%s:%d",RedisConString,port),
+			Network:  "tcp",
+			Addr:     fmt.Sprintf("%s:%d", RedisConString, port),
 			Password: RedisPassword,
 			DB:       RedisDbNumber,
 		})
 
 		cmdErr := chanelClient.Ping()
-		if cmdErr.Err()!=nil{
+		if cmdErr.Err() != nil {
 			return
 		}
 
-		client := Listener{QueueConsumer: cnsmr, ErrQueue: errQueue, NotifyClient: chanelClient,TasksQueue:tasksQueue}
+		client := Listener{QueueConsumer: cnsmr, ErrQueue: errQueue, NotifyClient: chanelClient, TasksQueue: tasksQueue}
 		client.Work()
 	}
 }

@@ -9,8 +9,9 @@ import (
 )
 
 type Generator struct {
-	TasksQueue *redismq.Queue
-	message string
+	TasksQueue   *redismq.Queue
+	message      string
+	temp         int
 	NotifyClient *redis.Client
 }
 
@@ -19,7 +20,7 @@ func (g *Generator) Work() {
 	for {
 		g.generateMessage()
 		g.sendMessage()
-		time.Sleep(5 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
 
@@ -33,4 +34,3 @@ func (g *Generator) sendMessage() {
 	g.TasksQueue.Put(g.message)
 	g.NotifyClient.Publish(constants.ChanelName, "new message ready")
 }
-
