@@ -4,4 +4,6 @@ localhost
 6
 tasksQueue
 errorsQueue
-chanel
+infoChanel
+voteChanel
+notifyChanel
