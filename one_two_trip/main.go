@@ -5,8 +5,8 @@ import (
 	. "Tests-Projects/one_two_trip/functions"
 	. "Tests-Projects/one_two_trip/structs"
 	"fmt"
-	"github.com/adeven/redismq"
-	"github.com/satori/go.uuid"
+	"github.com/AgileBits/go-redis-queue/redisqueue"
+	rd "github.com/gomodule/redigo/redis"
 	"gopkg.in/redis.v2"
 	"strconv"
 )
@@ -16,14 +16,14 @@ func main() {
 		ReadErrors()
 	} else {
 		//подключаемся к очередям
-		tasksQueue := redismq.CreateQueue(RedisConString, RedisPort, RedisPassword, RedisDbNumber, TasksQueueName)
-		errQueue := redismq.CreateQueue(RedisConString, RedisPort, RedisPassword, RedisDbNumber, ErrQueueName)
-
-		name, err := uuid.NewV4()
-		cnsmr, err := tasksQueue.AddConsumer(name.String())
+		con, err := rd.Dial("tcp",RedisConString+":"+RedisPort)
 		if err != nil {
 			return
 		}
+		defer con.Close()
+
+		tasksQueue := redisqueue.New(TasksQueueName, con)
+		errQueue := redisqueue.New(ErrQueueName, con)
 
 		port, err := strconv.Atoi(RedisPort)
 		if err != nil {
@@ -34,7 +34,6 @@ func main() {
 		chanelClient := redis.NewClient(&redis.Options{
 			Network:  "tcp",
 			Addr:     fmt.Sprintf("%s:%d", RedisConString, port),
-			Password: RedisPassword,
 			DB:       RedisDbNumber,
 		})
 
@@ -43,7 +42,8 @@ func main() {
 			return
 		}
 
-		client := Listener{QueueConsumer: cnsmr, ErrQueue: errQueue, NotifyClient: chanelClient, TasksQueue: tasksQueue}
+		client := Listener{TasksQueue:tasksQueue,ErrQueue: errQueue, NotifyClient: chanelClient}
 		client.Work()
+		fmt.Println("start vote")
 	}
 }

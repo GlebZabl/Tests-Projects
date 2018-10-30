@@ -2,31 +2,27 @@ package main
 
 import (
 	"fmt"
-	"github.com/adeven/redismq"
-	"github.com/satori/go.uuid"
+	"github.com/AgileBits/go-redis-queue/redisqueue"
+	"github.com/gomodule/redigo/redis"
 )
 
-
 func main() {
-	random,_ := uuid.NewV4()
-	consume("listener"+random.String())
-}
 
-func consume(name string) {
-	testQueue := redismq.CreateQueue("localhost", "6379", "", 6, "newQueue")
-	consumer, err := testQueue.AddConsumer(name)
+	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
-		panic(err)
 	}
-	for {
-		p, err := consumer.Get()
-		if err != nil {
-			continue
-		}
-		err = p.Ack()
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(p.Payload)
+	defer c.Close()
+
+	q := redisqueue.New("some_queue_name", c)
+
+	//wasAdded, err := q.Push("basic item")
+	//if err != nil {
+	//	fmt.Println(wasAdded)
+	//}
+
+	job, err := q.Pop()
+	if err!=nil{
+		fmt.Println(job)
 	}
+
 }

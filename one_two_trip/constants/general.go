@@ -11,7 +11,6 @@ const confPath = "./config.txt"
 var (
 	RedisConString string
 	RedisPort      string
-	RedisPassword  string
 	RedisDbNumber  int64
 	TasksQueueName string
 	ErrQueueName   string
@@ -22,15 +21,15 @@ var (
 
 //устанавливаем константы
 func init() {
-	RedisConString, RedisPort, RedisPassword, RedisDbNumber, TasksQueueName, ErrQueueName, ChanelName, VoteChanel, VoteNotifier = loadFromConfig(confPath)
+	RedisConString, RedisPort,RedisDbNumber, TasksQueueName, ErrQueueName, ChanelName, VoteChanel, VoteNotifier = loadFromConfig(confPath)
 }
 
 //чтение из файла
-func loadFromConfig(path string) (string, string, string, int64, string, string, string, string, string) {
+func loadFromConfig(path string) (string, string, int64, string, string, string, string, string) {
 	result := *new([]string)
 	file, err := os.Open(path)
 	if err != nil {
-		return "", "", "", 0, "", "", "", "", ""
+		return "", "", 0, "", "", "", "", ""
 	}
 	defer file.Close()
 
@@ -38,9 +37,9 @@ func loadFromConfig(path string) (string, string, string, int64, string, string,
 	for scanner.Scan() {
 		result = append(result, scanner.Text())
 	}
-	dbnmbr, err := strconv.Atoi(result[3])
+	dbnmbr, err := strconv.Atoi(result[2])
 	if err != nil {
-		return "", "", "", 0, "", "", "", "", ""
+		return "", "", 0, "", "", "", "", ""
 	}
-	return result[0], result[1], result[2], int64(dbnmbr), result[4], result[5], result[6], result[7], result[8]
+	return result[0], result[1], int64(dbnmbr), result[3], result[4], result[5], result[6], result[7]
 }

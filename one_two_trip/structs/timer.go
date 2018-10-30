@@ -5,6 +5,7 @@ import (
 )
 
 type timer struct {
+	time      time.Duration
 	age       int
 	inChanel  chan bool
 	outChanel chan bool
@@ -29,6 +30,6 @@ func (t *timer) Start() {
 
 //по истечению времени возвращает номер эпохи в которой был запущен
 func (t *timer) Sleep(deadLine chan int, age int) {
-	time.Sleep(600 * time.Millisecond)
+	time.Sleep(t.time)
 	deadLine <- age
 }
