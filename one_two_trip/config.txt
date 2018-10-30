@@ -1,8 +1,6 @@
-localhost
-6379
-6
-tasksQueue
-errorsQueue
-infoChanel
-voteChanel
-notifyChanel
+localhost:6379
+tasksQueue9
+errorsQueue9
+infoChanel9
+voteChanel9
+notifyChanel9

@@ -26,14 +26,14 @@ func (l *Listener) Work() {
 	l.fromTimer = make(chan bool)
 	l.toTimer = make(chan bool)
 	l.startVote = make(chan bool)
-	timer := timer{inChanel: l.toTimer, outChanel: l.fromTimer, time: 550 * time.Millisecond}
 
 	go l.listenVote()
 	go l.listen()
-	go timer.Start()
+	timer := time.NewTimer(700*time.Millisecond)
 	for {
 		select {
 		case <-l.needToCheck:
+			timer = time.NewTimer(700*time.Millisecond)
 			fmt.Println("get it")
 			if l.tryGetMsg() {
 				if !GetError() {
@@ -44,7 +44,8 @@ func (l *Listener) Work() {
 			}
 		case <-l.startVote:
 			return
-		case <-l.fromTimer:
+		case <-timer.C:
+			fmt.Println("initialize vote")
 			l.initializeVote()
 			return
 		}
@@ -65,7 +66,6 @@ func (l *Listener) listen() {
 
 		switch msg.(type) {
 		case *redis.Message:
-			l.toTimer <- true
 			l.needToCheck <- true
 		}
 	}

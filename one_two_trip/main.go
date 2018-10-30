@@ -7,16 +7,17 @@ import (
 	"fmt"
 	"github.com/AgileBits/go-redis-queue/redisqueue"
 	rd "github.com/gomodule/redigo/redis"
+	"github.com/satori/go.uuid"
 	"gopkg.in/redis.v2"
-	"strconv"
 )
 
 func main() {
 	if GetMode() {
 		ReadErrors()
 	} else {
+
 		//подключаемся к очередям
-		con, err := rd.Dial("tcp",RedisConString+":"+RedisPort)
+		con, err := rd.Dial("tcp",RedisConString)
 		if err != nil {
 			return
 		}
@@ -25,25 +26,41 @@ func main() {
 		tasksQueue := redisqueue.New(TasksQueueName, con)
 		errQueue := redisqueue.New(ErrQueueName, con)
 
-		port, err := strconv.Atoi(RedisPort)
-		if err != nil {
-			return
-		}
 
 		//создаём клиент для прослушивания канала
 		chanelClient := redis.NewClient(&redis.Options{
 			Network:  "tcp",
-			Addr:     fmt.Sprintf("%s:%d", RedisConString, port),
-			DB:       RedisDbNumber,
+			Addr:     RedisConString,
 		})
+		defer chanelClient.Close()
 
 		cmdErr := chanelClient.Ping()
 		if cmdErr.Err() != nil {
 			return
 		}
 
-		client := Listener{TasksQueue:tasksQueue,ErrQueue: errQueue, NotifyClient: chanelClient}
-		client.Work()
-		fmt.Println("start vote")
+		uid,err:=uuid.NewV4()
+		if err != nil{
+			return
+		}
+		name := uid.String()
+
+		listener := Listener{TasksQueue:tasksQueue,ErrQueue: errQueue, NotifyClient: chanelClient}
+		generator := Generator{TasksQueue:tasksQueue,NotifyClient:chanelClient}
+		voter := Voter{Name:name,Client:chanelClient}
+
+		leader := false
+		for {
+			fmt.Println("started")
+			if !leader {
+				fmt.Println("work as listaner")
+				listener.Work()
+				fmt.Println("start vote")
+				leader = voter.Vote()
+			}else{
+				fmt.Println("work as generator")
+				generator.Work()
+			}
+		}
 	}
 }

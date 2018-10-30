@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c037ff5-253e-4611-b5d0-ae18eabb5143" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/structs/voter.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/general.go" beforeDir="false" afterPath="$PROJECT_DIR$/constants/general.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structs/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/generator.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/structs/listener.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/listener.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/structs/timer.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/timer.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structs/timer.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tempconsumer.go" beforeDir="false" afterPath="$PROJECT_DIR$/tempconsumer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templisten.go" beforeDir="false" afterPath="$PROJECT_DIR$/templisten.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,28 +32,28 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="90" />
+          <entry key="go" value="106" />
           <entry key="s" value="1" />
-          <entry key="txt" value="9" />
+          <entry key="txt" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="90" />
-          <entry key="PLAIN_TEXT" value="9" />
+          <entry key="Go" value="106" />
+          <entry key="PLAIN_TEXT" value="10" />
           <entry key="x86 Plan9 Assembly" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="5837" />
-          <entry key="txt" value="101" />
+          <entry key="go" value="6830" />
+          <entry key="txt" value="154" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="5837" />
-          <entry key="PLAIN_TEXT" value="101" />
+          <entry key="Go" value="6830" />
+          <entry key="PLAIN_TEXT" value="154" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -58,23 +63,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.go">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
-              <folding>
-                <element signature="e#14#309#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="25">
+              <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/config.txt">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="12" />
+            <state relative-caret-position="667">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/structs/voter.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="19" column="48" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -82,11 +93,9 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/structs/listener.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="106">
-              <caret line="28" column="73" selection-start-line="28" selection-start-column="73" selection-end-line="28" selection-end-column="73" />
+            <state relative-caret-position="-444">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
               <folding>
-                <element signature="e#17#180#0" expanded="true" />
-                <element signature="n#!!block;n#listen#0" />
                 <element signature="n#!!block;n#listenVote#0" />
                 <element signature="n#!!block;n#tryGetMsg#0" />
                 <element signature="n#!!block;n#pushError#0" />
@@ -123,15 +132,16 @@
         <option value="$PROJECT_DIR$/structs/functions.go" />
         <option value="$PROJECT_DIR$/temp.go" />
         <option value="$PROJECT_DIR$/tempgenerate.go" />
-        <option value="$PROJECT_DIR$/constants/general.go" />
         <option value="$PROJECT_DIR$/functions/general.go" />
-        <option value="$PROJECT_DIR$/structs/generator.go" />
-        <option value="$PROJECT_DIR$/config.txt" />
-        <option value="$PROJECT_DIR$/structs/timer.go" />
-        <option value="$PROJECT_DIR$/tempconsumer.go" />
         <option value="$PROJECT_DIR$/templisten.go" />
+        <option value="$PROJECT_DIR$/tempconsumer.go" />
+        <option value="$PROJECT_DIR$/constants/general.go" />
+        <option value="$PROJECT_DIR$/structs/generator.go" />
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/structs/timer.go" />
         <option value="$PROJECT_DIR$/structs/listener.go" />
+        <option value="$PROJECT_DIR$/structs/voter.go" />
+        <option value="$PROJECT_DIR$/config.txt" />
       </list>
     </option>
   </component>
@@ -181,7 +191,7 @@
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../awesomeProject1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../awesomeProject" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -218,16 +228,6 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration name="go build tempgenerate.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="one_two_trip" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <go_parameters value="-i" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/tempgenerate.go" />
-      <package value="Tests-Projects/one_two_trip" />
-      <directory value="$PROJECT_DIR$/" />
-      <method v="2" />
-    </configuration>
     <configuration name="go build templisten.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="one_two_trip" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -240,7 +240,6 @@
     </configuration>
     <list>
       <item itemvalue="Go Build.go build main.go" />
-      <item itemvalue="Go Build.go build tempgenerate.go" />
       <item itemvalue="Go Build.go build templisten.go" />
       <item itemvalue="Go Build.go build tempconsumer.go" />
     </list>
@@ -249,7 +248,6 @@
         <item itemvalue="Go Build.go build main.go" />
         <item itemvalue="Go Build.go build templisten.go" />
         <item itemvalue="Go Build.go build tempconsumer.go" />
-        <item itemvalue="Go Build.go build tempgenerate.go" />
       </list>
     </recent_temporary>
   </component>
@@ -262,8 +260,8 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32949308" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39976957" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32949308" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39976957" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -307,15 +305,28 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/tempconsumer.go</url>
-          <line>48</line>
-          <option name="timeStamp" value="85" />
+          <url>file://$PROJECT_DIR$/templisten.go</url>
+          <line>11</line>
+          <properties />
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/templisten.go</url>
-          <line>10</line>
+          <line>16</line>
           <properties />
-          <option name="timeStamp" value="109" />
+          <option name="timeStamp" value="121" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/templisten.go</url>
+          <line>19</line>
+          <properties />
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/tempconsumer.go</url>
+          <line>13</line>
+          <properties />
+          <option name="timeStamp" value="123" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -372,44 +383,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/structs/errorReader.go" />
     <entry file="file://$PROJECT_DIR$/structs/constants.go" />
-    <entry file="file://$PROJECT_DIR$/structs/timer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="32" column="17" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/structs/generator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="32" column="34" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tempconsumer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="e#14#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../github.com/adeven/redismq/queue.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="216" column="53" lean-forward="true" selection-start-line="216" selection-start-column="53" selection-end-line="216" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/constants/general.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="443">
-          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
-          <folding>
-            <element signature="n#!!block;n#loadFromConfig#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -483,13 +460,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Go/src/runtime/proc.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="209" selection-start-line="209" selection-end-line="209" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../github.com/AgileBits/go-redis-queue/redisqueue/queue.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
@@ -497,33 +467,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Go/src/runtime/proc.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="209" selection-start-line="209" selection-end-line="209" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tempconsumer.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#14#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templisten.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+        <state relative-caret-position="256">
+          <caret line="34" column="28" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/constants/general.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/structs/generator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
           <folding>
-            <element signature="e#14#167#0" expanded="true" />
+            <element signature="e#17#194#0" expanded="true" />
+            <element signature="n#!!block;n#generateMessage#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/structs/timer.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
-          <folding>
-            <element signature="e#14#309#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="667">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/structs/listener.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="28" column="73" selection-start-line="28" selection-start-column="73" selection-end-line="28" selection-end-column="73" />
+        <state relative-caret-position="-444">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
-            <element signature="e#17#180#0" expanded="true" />
-            <element signature="n#!!block;n#listen#0" />
             <element signature="n#!!block;n#listenVote#0" />
             <element signature="n#!!block;n#tryGetMsg#0" />
             <element signature="n#!!block;n#pushError#0" />
@@ -532,10 +536,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/structs/voter.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="19" column="48" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="12" />
+        <state relative-caret-position="25">
+          <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
         </state>
       </provider>
     </entry>
