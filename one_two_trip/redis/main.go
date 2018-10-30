@@ -25,14 +25,11 @@ func main() {
 
 		//работаем в режиме обработчика пока не перестанет поступать сигнал, затем проводим выборы и продолжаем работу в режиме установленном выборами
 		for {
-			success, listener, generator, voter := PrepareElements(con)
+			success, message, listener, generator, voter := PrepareElements(con)
 			if !success {
+				println(message)
 				return
 			}
-			defer listener.NotifyClient.Close()
-			defer generator.NotifyClient.Close()
-			defer voter.PubClient.Close()
-			defer voter.SubClient.Close()
 
 			fmt.Println("work as listener")
 			listener.Work()
@@ -41,12 +38,17 @@ func main() {
 				fmt.Println("work as generator")
 				generator.Work()
 			}
+
+			listener.NotifyClient.Close()
+			generator.NotifyClient.Close()
+			voter.PubClient.Close()
+			voter.SubClient.Close()
 		}
 	}
 }
 
 //создаем элементы
-func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
+func PrepareElements(con rd.Conn) (bool, string, *Listener, *Generator, *Voter) {
 
 	//подключаемся к очередям
 	tasksQueue := redisqueue.New(TasksQueueName, con)
@@ -59,7 +61,7 @@ func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
 
 	cmdErr := listenerChanelClient.Ping()
 	if cmdErr.Err() != nil {
-		return false, nil, nil, nil
+		return false,cmdErr.Err().Error(), nil, nil, nil
 	}
 
 	//создаём клиент для прослушивания канала в режиме голосования
@@ -70,7 +72,7 @@ func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
 
 	cmdErr = voteSubClient.Ping()
 	if cmdErr.Err() != nil {
-		return false, nil, nil, nil
+		return false, cmdErr.Err().Error(), nil, nil, nil
 	}
 
 	//создаём клиент для публикации в режиме голосования
@@ -81,13 +83,13 @@ func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
 
 	cmdErr = votePubClient.Ping()
 	if cmdErr.Err() != nil {
-		return false, nil, nil, nil
+		return false, cmdErr.Err().Error(), nil, nil, nil
 	}
 
 	//получаем идентификатор для выборов
 	uid, err := uuid.NewV4()
 	if err != nil {
-		return false, nil, nil, nil
+		return false, cmdErr.Err().Error(), nil, nil, nil
 	}
 	name := uid.String()
 
@@ -95,5 +97,5 @@ func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
 	generator := Generator{TasksQueue: tasksQueue, NotifyClient: listenerChanelClient, Name: name}
 	voter := Voter{Name: name, SubClient: voteSubClient, PubClient: votePubClient}
 
-	return true, &listener, &generator, &voter
+	return true, "", &listener, &generator, &voter
 }
