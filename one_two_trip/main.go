@@ -15,6 +15,7 @@ func main() {
 	if GetMode() {
 		ReadErrors()
 	} else {
+
 		con, err := rd.Dial("tcp", RedisConString)
 		if err != nil {
 			return
