@@ -17,7 +17,7 @@ type Voter struct {
 func (v *Voter) Vote() bool {
 
 	v.selfChanel = make(chan string)
-	timer := time.NewTimer(400 * time.Millisecond)
+	timer := time.NewTimer(500 * time.Millisecond)
 
 	go v.listen()
 

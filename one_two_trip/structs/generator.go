@@ -20,6 +20,7 @@ type Generator struct {
 
 //отправляем рандомные сообщения раз в 500 мс
 func (g *Generator) Work() {
+	g.prepare()
 	g.messageSanded = 0
 	for {
 		g.generateMessage()
@@ -36,7 +37,19 @@ func (g *Generator) sendMessage() {
 }
 
 //как рандомное сообщение будем отправлять уникальное имя участника сети и номер сообщения среди отправленных этим участником(чтоб было нагляднее)
-func (g *Generator) generateMessage()  {
+func (g *Generator) generateMessage() {
 	g.message = g.Name + "  " + strconv.Itoa(g.messageSanded)
 	g.messageSanded++
+}
+
+//чистим очередь перед началом
+func (g *Generator) prepare() {
+	for {
+		msg, err := g.TasksQueue.Pop()
+
+		if err != nil || msg == "" {
+			return
+		}
+
+	}
 }

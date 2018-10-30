@@ -2,7 +2,7 @@ package structs
 
 import (
 	. "Tests-Projects/one_two_trip/constants"
-	. "Tests-Projects/one_two_trip/functions"
+	"Tests-Projects/one_two_trip/functions"
 	"fmt"
 	. "github.com/AgileBits/go-redis-queue/redisqueue"
 	"gopkg.in/redis.v2"
@@ -26,20 +26,13 @@ func (l *Listener) Work() {
 	l.toTimer = make(chan bool)
 
 	go l.listen()
-	timer := time.NewTimer(600 * time.Millisecond)
+	timer := time.NewTimer(7 * time.Second)
 	for {
 		select {
 		case <-l.needToCheck:
 			timer = time.NewTimer(600 * time.Millisecond)
-			if l.tryGetMsg() {
-				if !GetError() {
-					l.doSomethingWith(l.message)
-				} else {
-					l.pushError()
-				}
-			}
+			l.tryGetMsg()
 		case <-timer.C:
-			l.prepareForVote()
 			return
 		}
 	}
@@ -65,13 +58,19 @@ func (l *Listener) listen() {
 }
 
 //проверяем очередь на наличие сообщений
-func (l *Listener) tryGetMsg() bool {
-	msg, err := l.TasksQueue.Pop()
-	if err != nil || msg == "" {
-		return false
+func (l *Listener) tryGetMsg() {
+	for {
+		msg, err := l.TasksQueue.Pop()
+		if err != nil || msg == "" {
+			return
+		}
+		l.message = msg
+		if !functions.GetError() {
+			l.doSomethingWith(l.message)
+		} else {
+			l.pushError()
+		}
 	}
-	l.message = msg
-	return true
 }
 
 //возвращаем ошибку в redis
@@ -79,20 +78,7 @@ func (l *Listener) pushError() {
 	l.ErrQueue.Push(l.message)
 }
 
-//перед выборами дорабатываем все сообщения которые остались в очереди
-func (l *Listener) prepareForVote() {
-	for {
-		msg, err := l.TasksQueue.Pop()
-
-		if err != nil || msg == "" {
-			return
-		}
-
-		l.doSomethingWith(msg)
-	}
-}
-
 //так как в тз не сказано что делать с сообщениями будем выводить их в консоль
-func (l *Listener) doSomethingWith(message string)  {
+func (l *Listener) doSomethingWith(message string) {
 	fmt.Println(message)
 }

@@ -16,19 +16,17 @@ func main() {
 	if GetMode(os.Args) {
 		ReadErrors()
 	} else {
-
 		//подключаемся к редису
 		con, err := rd.Dial("tcp", RedisConString)
 		if err != nil {
 			return
 		}
 		defer con.Close()
-		leader := false
 
 		//работаем в режиме обработчика пока не перестанет поступать сигнал, затем проводим выборы и продолжаем работу в режиме установленном выборами
 		for {
-			success,listener,generator,voter:=PrepareElements(con)
-			if!success{
+			success, listener, generator, voter := PrepareElements(con)
+			if !success {
 				return
 			}
 			defer listener.NotifyClient.Close()
@@ -36,14 +34,10 @@ func main() {
 			defer voter.PubClient.Close()
 			defer voter.SubClient.Close()
 
-
-			fmt.Println("started")
-			if !leader {
-				fmt.Println("work as listener")
-				listener.Work()
-				fmt.Println("start vote")
-				leader = voter.Vote()
-			} else {
+			fmt.Println("work as listener")
+			listener.Work()
+			fmt.Println("start vote")
+			if voter.Vote() {
 				fmt.Println("work as generator")
 				generator.Work()
 			}
@@ -52,7 +46,7 @@ func main() {
 }
 
 //создаем элементы
-func PrepareElements(con rd.Conn) (bool,*Listener,*Generator,*Voter)  {
+func PrepareElements(con rd.Conn) (bool, *Listener, *Generator, *Voter) {
 
 	//подключаемся к очередям
 	tasksQueue := redisqueue.New(TasksQueueName, con)
@@ -63,10 +57,9 @@ func PrepareElements(con rd.Conn) (bool,*Listener,*Generator,*Voter)  {
 		Addr:    RedisConString,
 	})
 
-
 	cmdErr := listenerChanelClient.Ping()
 	if cmdErr.Err() != nil {
-		return false,nil,nil,nil
+		return false, nil, nil, nil
 	}
 
 	//создаём клиент для прослушивания канала в режиме голосования
@@ -75,10 +68,9 @@ func PrepareElements(con rd.Conn) (bool,*Listener,*Generator,*Voter)  {
 		Addr:    RedisConString,
 	})
 
-
 	cmdErr = voteSubClient.Ping()
 	if cmdErr.Err() != nil {
-		return false,nil,nil,nil
+		return false, nil, nil, nil
 	}
 
 	//создаём клиент для публикации в режиме голосования
@@ -87,16 +79,15 @@ func PrepareElements(con rd.Conn) (bool,*Listener,*Generator,*Voter)  {
 		Addr:    RedisConString,
 	})
 
-
 	cmdErr = votePubClient.Ping()
 	if cmdErr.Err() != nil {
-		return false,nil,nil,nil
+		return false, nil, nil, nil
 	}
 
 	//получаем идентификатор для выборов
 	uid, err := uuid.NewV4()
 	if err != nil {
-		return false,nil,nil,nil
+		return false, nil, nil, nil
 	}
 	name := uid.String()
 
@@ -104,5 +95,5 @@ func PrepareElements(con rd.Conn) (bool,*Listener,*Generator,*Voter)  {
 	generator := Generator{TasksQueue: tasksQueue, NotifyClient: listenerChanelClient, Name: name}
 	voter := Voter{Name: name, SubClient: voteSubClient, PubClient: votePubClient}
 
-	return true,&listener,&generator,&voter
+	return true, &listener, &generator, &voter
 }
