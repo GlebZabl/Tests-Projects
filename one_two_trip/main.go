@@ -9,10 +9,11 @@ import (
 	rd "github.com/gomodule/redigo/redis"
 	"github.com/satori/go.uuid"
 	"gopkg.in/redis.v2"
+	"os"
 )
 
 func main() {
-	if GetMode() {
+	if GetMode(os.Args) {
 		ReadErrors()
 	} else {
 
