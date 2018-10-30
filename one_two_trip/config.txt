@@ -1,6 +1,6 @@
 localhost:6379
-tasksQueue11
-errorsQueue11
-infoChanel11
-voteChanel11
-notifyChanel11
+tasksQueuetest1
+errorsQueuetest1
+infoChaneltest1
+voteChaneltest1
+notifyChaneltest1

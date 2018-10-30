@@ -26,22 +26,20 @@ func (l *Listener) Work() {
 	l.toTimer = make(chan bool)
 
 	go l.listen()
-	timer := time.NewTimer(501 * time.Millisecond)
+	timer := time.NewTimer(600 * time.Millisecond)
 	for {
 		select {
 		case <-l.needToCheck:
-			timer = time.NewTimer(501 * time.Millisecond)
-			fmt.Println("get it")
+			timer = time.NewTimer(600 * time.Millisecond)
 			if l.tryGetMsg() {
 				if !GetError() {
-					fmt.Println(l.message)
+					l.doSomethingWith(l.message)
 				} else {
 					l.pushError()
 				}
 			}
 		case <-timer.C:
-			fmt.Println("initialize vote")
-			l.initializeVote()
+			l.prepareForVote()
 			return
 		}
 	}
@@ -81,7 +79,20 @@ func (l *Listener) pushError() {
 	l.ErrQueue.Push(l.message)
 }
 
-//оповещаем о начале выборов
-func (l *Listener) initializeVote() {
-	l.NotifyClient.Publish(VoteNotifier, "Vote!")
+//перед выборами дорабатываем все сообщения которые остались в очереди
+func (l *Listener) prepareForVote() {
+	for {
+		msg, err := l.TasksQueue.Pop()
+
+		if err != nil || msg == "" {
+			return
+		}
+
+		l.doSomethingWith(msg)
+	}
+}
+
+//так как в тз не сказано что делать с сообщениями будем выводить их в консоль
+func (l *Listener) doSomethingWith(message string)  {
+	fmt.Println(message)
 }

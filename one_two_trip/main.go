@@ -15,71 +15,75 @@ func main() {
 	if GetMode() {
 		ReadErrors()
 	} else {
-
-		//подключаемся к очередям
-		con, err := rd.Dial("tcp",RedisConString)
+		con, err := rd.Dial("tcp", RedisConString)
 		if err != nil {
 			return
 		}
 		defer con.Close()
 
+		//подключаемся к очередям
 		tasksQueue := redisqueue.New(TasksQueueName, con)
 		errQueue := redisqueue.New(ErrQueueName, con)
 
 
-		//создаём клиент для прослушивания канала
-		chanelClient := redis.NewClient(&redis.Options{
-			Network:  "tcp",
-			Addr:     RedisConString,
-		})
-		defer chanelClient.Close()
-
-		cmdErr := chanelClient.Ping()
-		if cmdErr.Err() != nil {
-			return
-		}
-
-		voteSubClient := redis.NewClient(&redis.Options{
-			Network:  "tcp",
-			Addr:     RedisConString,
-		})
-		defer chanelClient.Close()
-
-		cmdErr = voteSubClient.Ping()
-		if cmdErr.Err() != nil {
-			return
-		}
-
-		votePubClient := redis.NewClient(&redis.Options{
-			Network:  "tcp",
-			Addr:     RedisConString,
-		})
-		defer chanelClient.Close()
-
-		cmdErr = votePubClient.Ping()
-		if cmdErr.Err() != nil {
-			return
-		}
-
-		uid,err:=uuid.NewV4()
-		if err != nil{
-			return
-		}
-		name := uid.String()
-
-		listener := Listener{TasksQueue:tasksQueue,ErrQueue: errQueue, NotifyClient: chanelClient}
-		generator := Generator{TasksQueue:tasksQueue,NotifyClient:chanelClient}
-		voter := Voter{Name:name,SubClient:voteSubClient,PubClient:votePubClient}
-
 		leader := false
+
+		//работаем в режиме обработчика пока не перестанет поступать сигнал, затем проводим выборы и продолжаем работу в режиме установленном выборами
 		for {
+			//создаём клиент для прослушивания канала
+			listenerChanelClient := redis.NewClient(&redis.Options{
+				Network: "tcp",
+				Addr:    RedisConString,
+			})
+			defer listenerChanelClient.Close()
+
+			cmdErr := listenerChanelClient.Ping()
+			if cmdErr.Err() != nil {
+				return
+			}
+
+			//создаём клиент для прослушивания канала в режиме голосования
+			voteSubClient := redis.NewClient(&redis.Options{
+				Network: "tcp",
+				Addr:    RedisConString,
+			})
+			defer voteSubClient.Close()
+
+			cmdErr = voteSubClient.Ping()
+			if cmdErr.Err() != nil {
+				return
+			}
+
+			//создаём клиент для публикации в режиме голосования
+			votePubClient := redis.NewClient(&redis.Options{
+				Network: "tcp",
+				Addr:    RedisConString,
+			})
+			defer votePubClient.Close()
+
+			cmdErr = votePubClient.Ping()
+			if cmdErr.Err() != nil {
+				return
+			}
+
+			//получаем идентификатор для выборов
+			uid, err := uuid.NewV4()
+			if err != nil {
+				return
+			}
+			name := uid.String()
+
+			listener := Listener{TasksQueue: tasksQueue, ErrQueue: errQueue, NotifyClient: listenerChanelClient}
+			generator := Generator{TasksQueue: tasksQueue, NotifyClient: listenerChanelClient, Name: name}
+			voter := Voter{Name: name, SubClient: voteSubClient, PubClient: votePubClient}
+
 			fmt.Println("started")
 			if !leader {
-				fmt.Println("work as listaner")
+				fmt.Println("work as listener")
 				listener.Work()
 				fmt.Println("start vote")
 				leader = voter.Vote()
-			}else{
+			} else {
 				fmt.Println("work as generator")
 				generator.Work()
 			}
