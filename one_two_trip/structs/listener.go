@@ -29,7 +29,7 @@ func (l *Listener) Work() {
 
 	go l.listenVote()
 	go l.listen()
-	timer := time.NewTimer(700*time.Millisecond)
+	timer := time.NewTimer(4*time.Second)
 	for {
 		select {
 		case <-l.needToCheck:

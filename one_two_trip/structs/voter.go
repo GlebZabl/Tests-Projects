@@ -1,27 +1,30 @@
 package structs
 
 import (
-	."Tests-Projects/one_two_trip/constants"
+	. "Tests-Projects/one_two_trip/constants"
 	"gopkg.in/redis.v2"
 	"time"
 )
 
 type Voter struct {
 	Name string
-	Client *redis.Client
+	SubClient *redis.Client
+	PubClient *redis.Client
+	selfChanel chan string
 }
 
 func (v *Voter) Vote() bool  {
 
-	fromListener := make(chan string)
-	timer := time.NewTimer(5* time.Second)
+	v.selfChanel = make(chan string)
+	timer := time.NewTimer(500*time.Millisecond)
 
-	go v.listen(fromListener)
+	go v.listen()
 
 	iAmTheKing := true
+	v.PubClient.Publish(VoteChanel,v.Name)
 	for{
 		select {
-		case condidate := <- fromListener:
+		case condidate := <- v.selfChanel:
 			if condidate>v.Name{
 				iAmTheKing = false
 			}
@@ -31,8 +34,8 @@ func (v *Voter) Vote() bool  {
 	}
 }
 
-func (v *Voter) listen(outChan chan string)  {
-	pubSub := v.Client.PubSub()
+func (v *Voter) listen()  {
+	pubSub := v.SubClient.PubSub()
 	defer pubSub.Close()
 	pubSub.Subscribe(VoteChanel)
 	for {
@@ -44,7 +47,8 @@ func (v *Voter) listen(outChan chan string)  {
 
 		switch msg.(type) {
 		case *redis.Message:
-			outChan<-msg.(*redis.Message).Payload
+			v.PubClient.Publish(VoteChanel,v.Name)
+			v.selfChanel<-msg.(*redis.Message).Payload
 		}
 	}
 }

@@ -39,6 +39,28 @@ func main() {
 			return
 		}
 
+		voteSubClient := redis.NewClient(&redis.Options{
+			Network:  "tcp",
+			Addr:     RedisConString,
+		})
+		defer chanelClient.Close()
+
+		cmdErr = voteSubClient.Ping()
+		if cmdErr.Err() != nil {
+			return
+		}
+
+		votePubClient := redis.NewClient(&redis.Options{
+			Network:  "tcp",
+			Addr:     RedisConString,
+		})
+		defer chanelClient.Close()
+
+		cmdErr = votePubClient.Ping()
+		if cmdErr.Err() != nil {
+			return
+		}
+
 		uid,err:=uuid.NewV4()
 		if err != nil{
 			return
@@ -47,7 +69,7 @@ func main() {
 
 		listener := Listener{TasksQueue:tasksQueue,ErrQueue: errQueue, NotifyClient: chanelClient}
 		generator := Generator{TasksQueue:tasksQueue,NotifyClient:chanelClient}
-		voter := Voter{Name:name,Client:chanelClient}
+		voter := Voter{Name:name,SubClient:voteSubClient,PubClient:votePubClient}
 
 		leader := false
 		for {
