@@ -20,7 +20,6 @@ type Generator struct {
 
 //отправляем рандомные сообщения раз в 500 мс
 func (g *Generator) Work() {
-	g.prepare()
 	g.messageSanded = 0
 	for {
 		g.generateMessage()
@@ -42,14 +41,3 @@ func (g *Generator) generateMessage() {
 	g.messageSanded++
 }
 
-//чистим очередь перед началом
-func (g *Generator) prepare() {
-	for {
-		msg, err := g.TasksQueue.Pop()
-
-		if err != nil || msg == "" {
-			return
-		}
-
-	}
-}
