@@ -7,34 +7,37 @@ import (
 )
 
 type Voter struct {
-	Name string
-	SubClient *redis.Client
-	PubClient *redis.Client
+	Name       string
+	SubClient  *redis.Client
+	PubClient  *redis.Client
 	selfChanel chan string
 }
 
-func (v *Voter) Vote() bool  {
+//начинаем слушать конкурентов, затем с небольшой задержкой(нужна чтоб все участники успели начали слушать) выдвигаем кандидатуру
+func (v *Voter) Vote() bool {
 
 	v.selfChanel = make(chan string)
-	timer := time.NewTimer(500*time.Millisecond)
+	timer := time.NewTimer(400 * time.Millisecond)
 
 	go v.listen()
 
 	iAmTheKing := true
-	v.PubClient.Publish(VoteChanel,v.Name)
-	for{
+	time.Sleep(100 * time.Millisecond)
+	v.PubClient.Publish(VoteChanel, v.Name)
+	for {
 		select {
-		case condidate := <- v.selfChanel:
-			if condidate>v.Name{
+		case candidate := <-v.selfChanel:
+			if candidate > v.Name {
 				iAmTheKing = false
 			}
-		case <- timer.C:
+		case <-timer.C:
 			return iAmTheKing
 		}
 	}
 }
 
-func (v *Voter) listen()  {
+//слушаем кандидатов
+func (v *Voter) listen() {
 	pubSub := v.SubClient.PubSub()
 	defer pubSub.Close()
 	pubSub.Subscribe(VoteChanel)
@@ -47,8 +50,7 @@ func (v *Voter) listen()  {
 
 		switch msg.(type) {
 		case *redis.Message:
-			v.PubClient.Publish(VoteChanel,v.Name)
-			v.selfChanel<-msg.(*redis.Message).Payload
+			v.selfChanel <- msg.(*redis.Message).Payload
 		}
 	}
 }

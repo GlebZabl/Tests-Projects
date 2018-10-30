@@ -14,7 +14,6 @@ type Listener struct {
 	fromTimer    chan bool
 	toTimer      chan bool
 	needToCheck  chan bool
-	startVote    chan bool
 	TasksQueue   *Queue
 	ErrQueue     *Queue
 	NotifyClient *redis.Client
@@ -25,15 +24,13 @@ func (l *Listener) Work() {
 	l.needToCheck = make(chan bool)
 	l.fromTimer = make(chan bool)
 	l.toTimer = make(chan bool)
-	l.startVote = make(chan bool)
 
-	go l.listenVote()
 	go l.listen()
-	timer := time.NewTimer(4*time.Second)
+	timer := time.NewTimer(501 * time.Millisecond)
 	for {
 		select {
 		case <-l.needToCheck:
-			timer = time.NewTimer(700*time.Millisecond)
+			timer = time.NewTimer(501 * time.Millisecond)
 			fmt.Println("get it")
 			if l.tryGetMsg() {
 				if !GetError() {
@@ -42,8 +39,6 @@ func (l *Listener) Work() {
 					l.pushError()
 				}
 			}
-		case <-l.startVote:
-			return
 		case <-timer.C:
 			fmt.Println("initialize vote")
 			l.initializeVote()
@@ -67,25 +62,6 @@ func (l *Listener) listen() {
 		switch msg.(type) {
 		case *redis.Message:
 			l.needToCheck <- true
-		}
-	}
-}
-
-//слушаем канал сообщающий о начале выборов
-func (l *Listener) listenVote() {
-	pubSub := l.NotifyClient.PubSub()
-	defer pubSub.Close()
-	pubSub.Subscribe(VoteNotifier)
-	for {
-		msg, err := pubSub.Receive()
-
-		if err != nil {
-			return
-		}
-
-		switch msg.(type) {
-		case *redis.Message:
-			l.startVote <- true
 		}
 	}
 }
