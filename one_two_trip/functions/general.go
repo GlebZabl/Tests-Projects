@@ -1,7 +1,7 @@
 package functions
 
 import (
-	."Tests-Projects/one_two_trip/constants"
+	. "Tests-Projects/one_two_trip/constants"
 	"fmt"
 	"github.com/AgileBits/go-redis-queue/redisqueue"
 	rd "github.com/gomodule/redigo/redis"
