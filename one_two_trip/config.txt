@@ -1,5 +1,0 @@
-localhost:6379
-tasksQueuetest
-errorsQueuetest
-infoChaneltest
-voteChaneltest
