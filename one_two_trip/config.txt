@@ -3,4 +3,3 @@ tasksQueuetest
 errorsQueuetest
 infoChaneltest
 voteChaneltest
-notifyChaneltest
