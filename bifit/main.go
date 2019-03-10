@@ -13,16 +13,16 @@ const filePath = "./source.txt"
 func main() {
 
 	err, size := getSize(filePath)
-	if err{
+	if err {
 		println("cant load source file, sorry")
 		return
 	}
 
 	parser := structs.FileParser{FieldSize: size}
 	err, result := parser.Parse(filePath)
-	if !err{
+	if !err {
 		printOut(result)
-	}else{
+	} else {
 		println("wrong field format, checkout what it must looks like, from readme ")
 	}
 }
@@ -44,7 +44,7 @@ func printOut(data [][]int) {
 }
 
 //смотрим размер одной стороны поля
-func getSize(path string) (bool,int) {
+func getSize(path string) (bool, int) {
 	result := -1
 	file, err := os.Open(path)
 	if err != nil {
@@ -54,11 +54,11 @@ func getSize(path string) (bool,int) {
 
 	scanner := bufio.NewScanner(file)
 	scanner.Scan()
-	line:=scanner.Text()
-	for i := range line{
-		if line[i:i+1] == "O" || line[i:i+1] == "X"{
+	line := scanner.Text()
+	for i := range line {
+		if line[i:i+1] == "O" || line[i:i+1] == "X" {
 			result++
 		}
 	}
-	return false,result
+	return false, result
 }

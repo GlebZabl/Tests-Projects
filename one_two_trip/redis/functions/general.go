@@ -33,8 +33,8 @@ func ReadErrors() {
 }
 
 //возвращает режим работы
-func GetMode(args[] string) bool {
-	if len(args) > 1{
+func GetMode(args []string) bool {
+	if len(args) > 1 {
 		return args[1] == "getErrors"
 	}
 	return false

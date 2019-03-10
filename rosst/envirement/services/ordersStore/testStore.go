@@ -1,8 +1,8 @@
 package ordersStore
 
 import (
-	"test_project/envirement/errors"
-	"test_project/envirement/models"
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/models"
 )
 
 type TestStore struct{}

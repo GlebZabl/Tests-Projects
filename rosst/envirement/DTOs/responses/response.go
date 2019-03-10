@@ -1,9 +1,9 @@
 package responses
 
 import (
+	"Tests-Projects/rosst/envirement/errors"
 	"encoding/json"
 	"net/http"
-	"test_project/envirement/errors"
 )
 
 type Response struct {

@@ -3,8 +3,8 @@ package ordersStore
 import (
 	"database/sql"
 
-	"test_project/envirement/errors"
-	"test_project/envirement/models"
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/models"
 
 	"github.com/jmoiron/sqlx"
 	sqlBuilder "gopkg.in/Masterminds/squirrel.v1"

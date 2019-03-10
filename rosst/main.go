@@ -2,12 +2,13 @@ package main
 
 import (
 	"net/http"
-	"test_project/controllers"
-	"test_project/controllers/middlewares"
-	"test_project/controllers/orders"
-	"test_project/envirement/config"
-	"test_project/envirement/errors"
-	"test_project/envirement/services"
+
+	"Tests-Projects/rosst/controllers"
+	"Tests-Projects/rosst/controllers/middlewares"
+	"Tests-Projects/rosst/controllers/orders"
+	"Tests-Projects/rosst/envirement/config"
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/services"
 )
 
 const confPath = "./config.json"
@@ -46,8 +47,8 @@ func initialize(confPath string) error {
 func createRouter() *http.ServeMux {
 	result := http.NewServeMux()
 
-	result.HandleFunc(controllers.MakeOrderUrl, middlewares.Validation(orders.MakeOrder))
-	result.HandleFunc(controllers.GetOrdersUrl, middlewares.Validation(orders.GetOrders))
+	result.HandleFunc(controllers.MakeOrderUrl, middlewares.POST(middlewares.Validation(orders.MakeOrder)))
+	result.HandleFunc(controllers.GetOrdersUrl, middlewares.GET(middlewares.Validation(orders.GetOrders)))
 
 	return result
 }

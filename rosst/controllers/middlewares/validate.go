@@ -3,9 +3,9 @@ package middlewares
 import (
 	"net/http"
 
-	"test_project/envirement/DTOs/requests"
-	"test_project/envirement/DTOs/responses"
-	"test_project/envirement/services"
+	"Tests-Projects/rosst/envirement/DTOs/requests"
+	"Tests-Projects/rosst/envirement/DTOs/responses"
+	"Tests-Projects/rosst/envirement/services"
 )
 
 func Validation(next func(*services.ServiceLocator, requests.Request, responses.Response)) func(http.ResponseWriter, *http.Request) {

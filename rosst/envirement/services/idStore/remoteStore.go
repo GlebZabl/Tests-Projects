@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"test_project/envirement/errors"
+	"Tests-Projects/rosst/envirement/errors"
 )
 
 const urlPath = "https://www.uuidgenerator.net/api/version4"

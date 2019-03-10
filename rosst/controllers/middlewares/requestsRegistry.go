@@ -1,10 +1,10 @@
 package middlewares
 
 import (
+	"Tests-Projects/rosst/controllers"
+	"Tests-Projects/rosst/envirement/DTOs/requests"
+	"Tests-Projects/rosst/envirement/errors"
 	"reflect"
-	"test_project/controllers"
-	"test_project/envirement/DTOs/requests"
-	"test_project/envirement/errors"
 )
 
 var registry = map[string]requests.Request{

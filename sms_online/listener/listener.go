@@ -12,7 +12,7 @@ func main() {
 	for {
 		select {
 		case <-reloadchan:
-			go	Listen(reloadchan)
+			go Listen(reloadchan)
 		}
 	}
 }

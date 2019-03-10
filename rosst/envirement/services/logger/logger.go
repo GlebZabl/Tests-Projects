@@ -1,8 +1,8 @@
 package logger
 
 import (
+	"Tests-Projects/rosst/envirement/errors"
 	"fmt"
-	"test_project/envirement/errors"
 	"time"
 )
 

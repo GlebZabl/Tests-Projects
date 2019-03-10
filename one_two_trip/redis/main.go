@@ -61,7 +61,7 @@ func PrepareElements(con rd.Conn) (bool, string, *Listener, *Generator, *Voter) 
 
 	cmdErr := listenerChanelClient.Ping()
 	if cmdErr.Err() != nil {
-		return false,cmdErr.Err().Error(), nil, nil, nil
+		return false, cmdErr.Err().Error(), nil, nil, nil
 	}
 
 	//создаём клиент для прослушивания канала в режиме голосования

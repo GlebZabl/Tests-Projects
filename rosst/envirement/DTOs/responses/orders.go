@@ -1,6 +1,6 @@
 package responses
 
-import "test_project/envirement/models"
+import "Tests-Projects/rosst/envirement/models"
 
 type MakeOrder struct {
 	OrderId string `json:"orderId"`

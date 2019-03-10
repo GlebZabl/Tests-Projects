@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"test_project/envirement/errors"
+	"Tests-Projects/rosst/envirement/errors"
 )
 
 type fullPrinter struct {

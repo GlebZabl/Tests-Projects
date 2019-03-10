@@ -6,4 +6,3 @@ type Message struct {
 	GetByListenerDate int64  `json:"get_by_listener_date"`
 	InsertDate        int64  `json:"insert_date"`
 }
-

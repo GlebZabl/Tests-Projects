@@ -1,9 +1,9 @@
 package orders
 
 import (
-	"test_project/envirement/DTOs/requests"
-	"test_project/envirement/DTOs/responses"
-	"test_project/envirement/services"
+	"Tests-Projects/rosst/envirement/DTOs/requests"
+	"Tests-Projects/rosst/envirement/DTOs/responses"
+	"Tests-Projects/rosst/envirement/services"
 )
 
 func MakeOrder(env *services.ServiceLocator, req requests.Request, response responses.Response) {

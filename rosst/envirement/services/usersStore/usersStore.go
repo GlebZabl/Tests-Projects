@@ -1,6 +1,6 @@
 package usersStore
 
-import "test_project/envirement/models"
+import "Tests-Projects/rosst/envirement/models"
 
 type UsersStore interface {
 	AddUser(models.User) error

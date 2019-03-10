@@ -40,4 +40,3 @@ func (g *Generator) generateMessage() {
 	g.message = g.Name + "  " + strconv.Itoa(g.messageSanded)
 	g.messageSanded++
 }
-

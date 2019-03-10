@@ -1,8 +1,8 @@
 package usersStore
 
 import (
-	"test_project/envirement/errors"
-	"test_project/envirement/models"
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/models"
 )
 
 var users = map[string]models.User{}

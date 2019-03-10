@@ -6,24 +6,24 @@ import (
 )
 
 //функция опрашивающая очередь
-func Listen(reload chan bool)  {
+func Listen(reload chan bool) {
 	conn, err := amqp.Dial(QueueConnectionString)
-	if err != nil{
+	if err != nil {
 		reload <- true
 		return
 	}
 
 	defer conn.Close()
 
-	chanel,err := conn.Channel()
-	if err!=nil {
+	chanel, err := conn.Channel()
+	if err != nil {
 		reload <- true
 		return
 	}
 
 	defer chanel.Close()
 
-	for{
+	for {
 		msgs, err := chanel.Consume(
 			QueueName,
 			"",
@@ -34,46 +34,46 @@ func Listen(reload chan bool)  {
 			nil,
 		)
 
-		if err != nil{
-			reload<-true
+		if err != nil {
+			reload <- true
 			return
 		}
 
-		for msg := range msgs{
+		for msg := range msgs {
 			data := new(Message)
-			err = json.Unmarshal([]byte(string(msg.Body)),data)
+			err = json.Unmarshal([]byte(string(msg.Body)), data)
 			SaveMessage(*data)
 		}
 	}
 }
 
 //функция отвечающая за сохранение сообщение в бд или возврат его в очередь
-func SaveMessage(msg Message)  {
-		if  InsertMessage(msg) == nil{
-			return
-		}else{
-			beckToQueue(msg)
-		}
+func SaveMessage(msg Message) {
+	if InsertMessage(msg) == nil {
+		return
+	} else {
+		beckToQueue(msg)
+	}
 }
 
 //функция отвечающая за возврат необработанного сообщения в очередь
-func beckToQueue(msg Message){
+func beckToQueue(msg Message) {
 	QuData := msg
 
 	jsonData, err := json.Marshal(QuData)
-	if err != nil{
+	if err != nil {
 		return
 	}
 
 	conn, err := amqp.Dial(QueueConnectionString)
-	if err != nil{
+	if err != nil {
 		return
 	}
 
 	defer conn.Close()
 
-	chanel,err := conn.Channel()
-	if err!=nil {
+	chanel, err := conn.Channel()
+	if err != nil {
 		return
 	}
 
@@ -84,7 +84,7 @@ func beckToQueue(msg Message){
 		QueueName,
 		false,
 		false,
-		amqp.Publishing {
+		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        jsonData,
 		})

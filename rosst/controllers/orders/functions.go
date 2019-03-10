@@ -1,10 +1,10 @@
 package orders
 
 import (
-	"test_project/envirement/models"
-	"test_project/envirement/services/idStore"
-	"test_project/envirement/services/ordersStore"
-	"test_project/envirement/services/usersStore"
+	"Tests-Projects/rosst/envirement/models"
+	"Tests-Projects/rosst/envirement/services/idStore"
+	"Tests-Projects/rosst/envirement/services/ordersStore"
+	"Tests-Projects/rosst/envirement/services/usersStore"
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package logger
 
 import (
+	"Tests-Projects/rosst/envirement/errors"
 	"os"
-	"test_project/envirement/errors"
 )
 
 type filePrinter struct {

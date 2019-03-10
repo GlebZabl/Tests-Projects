@@ -3,8 +3,8 @@ package requests
 const mailRegExp = `[a-zA-Z]*@[a-zA-Z]*\.(ru|com|org|mail)`
 
 type MakeOrder struct {
-	Mail      string `query:"mail"`
-	OrderInfo string `query:"orderInfo"`
+	Mail      string `json:"mail"`
+	OrderInfo string `json:"orderInfo"`
 }
 
 func (m *MakeOrder) Validate() bool {

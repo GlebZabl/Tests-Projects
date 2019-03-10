@@ -1,9 +1,9 @@
 package config
 
 import (
+	"Tests-Projects/rosst/envirement/errors"
 	"encoding/json"
 	"io/ioutil"
-	"test_project/envirement/errors"
 )
 
 type ConfOptions struct {

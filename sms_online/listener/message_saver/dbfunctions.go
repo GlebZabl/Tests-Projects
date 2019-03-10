@@ -7,7 +7,7 @@ import (
 )
 
 //функция отвечающая за вставку сообщения в бд
-func InsertMessage(msg Message) error  {
+func InsertMessage(msg Message) error {
 	db, err := sql.Open("mysql", DBConnectionString)
 	if err != nil {
 		return err
@@ -19,14 +19,14 @@ func InsertMessage(msg Message) error  {
 
 	insertDate := time.Now().Unix()
 
-	result, err := db.Exec(sql, msg.Text,msg.GetByHTTPDate,msg.GetByListenerDate, insertDate)
+	result, err := db.Exec(sql, msg.Text, msg.GetByHTTPDate, msg.GetByListenerDate, insertDate)
 
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
-	affected,err := result.RowsAffected()
-	if affected != 1 || err != nil{
+	affected, err := result.RowsAffected()
+	if affected != 1 || err != nil {
 		return *new(error)
 	}
 

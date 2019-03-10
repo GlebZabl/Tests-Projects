@@ -1,12 +1,12 @@
 package services
 
 import (
-	"test_project/envirement/config"
-	"test_project/envirement/errors"
-	"test_project/envirement/services/idStore"
-	"test_project/envirement/services/logger"
-	"test_project/envirement/services/ordersStore"
-	"test_project/envirement/services/usersStore"
+	"Tests-Projects/rosst/envirement/config"
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/services/idStore"
+	"Tests-Projects/rosst/envirement/services/logger"
+	"Tests-Projects/rosst/envirement/services/ordersStore"
+	"Tests-Projects/rosst/envirement/services/usersStore"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"

@@ -1,6 +1,6 @@
 package ordersStore
 
-import "test_project/envirement/models"
+import "Tests-Projects/rosst/envirement/models"
 
 type OrderStore interface {
 	SaveOrder(o models.Order) error

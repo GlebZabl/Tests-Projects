@@ -22,6 +22,7 @@ type fullSet struct {
 var (
 	channelsMap map[int]*fullSet
 )
+
 //структура которую возвращает lineparser
 type stopChanStruct struct {
 	lineNumber int
@@ -240,7 +241,7 @@ func (l *lineParser) listenReady() {
 
 //получаем статус(можно ли закрыть поток обрабатывающий строку)
 func (l *lineParser) getStatus() bool {
-	if l.fieldSize == 0{
+	if l.fieldSize == 0 {
 		return true
 	}
 	if l.lineNumber == 0 {

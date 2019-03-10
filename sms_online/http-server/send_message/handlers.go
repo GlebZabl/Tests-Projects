@@ -6,10 +6,9 @@ import (
 )
 
 //хэндлер запроса
-func GetMessage(res http.ResponseWriter, _ *http.Request, params httprouter.Params)  {
-	message:= params.ByName("message")
-	err,message := AddToQueue(message)
-	response := Response{Status:err==nil,Message:message}
+func GetMessage(res http.ResponseWriter, _ *http.Request, params httprouter.Params) {
+	message := params.ByName("message")
+	err, message := AddToQueue(message)
+	response := Response{Status: err == nil, Message: message}
 	response.send(res)
 }
-
