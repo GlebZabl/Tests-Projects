@@ -1,0 +1,9 @@
+{
+    "port":":80",
+    "logger":"console",
+    "db_options":{
+        "connection_string":"root:7180914@(localhost:3306)/test",
+        "driver_name":"mysql"
+    },
+    "time_out_of_remote_req":3
+}
