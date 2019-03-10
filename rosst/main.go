@@ -37,10 +37,16 @@ func initialize(confPath string) error {
 		return err
 	}
 
-	err = services.InitServices(*cfg)
+	if cfg.IsTestEnv {
+		err = services.InitTestEnv(*cfg)
+	} else {
+		err = services.InitServices(*cfg)
+	}
+
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

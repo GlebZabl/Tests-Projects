@@ -1,11 +1,12 @@
 package orders
 
 import (
-	"test_project/envirement/models"
-	"test_project/envirement/services/idStore"
-	"test_project/envirement/services/ordersStore"
-	"test_project/envirement/services/usersStore"
 	"testing"
+
+	"Tests-Projects/rosst/envirement/models"
+	"Tests-Projects/rosst/envirement/services/idStore"
+	"Tests-Projects/rosst/envirement/services/ordersStore"
+	"Tests-Projects/rosst/envirement/services/usersStore"
 )
 
 func TestCheckOrCreateUserByMailFunc(t *testing.T) {
@@ -54,16 +55,19 @@ func TestCreateUserByMailFunc(t *testing.T) {
 	user, _ := createUser(iStore, uStore, "testUser")
 	if user == nil {
 		t.Fail()
+		return
 	}
 
 	dataChanger, ok := uStore.(*usersStore.TestStore)
 	if !ok {
 		t.Fail()
+		return
 	}
 
 	u, ok := dataChanger.GetData()[user.Id]
 	if !ok || u.Id != user.Id || u.Mail != "testUser" {
 		t.Fail()
+		return
 	}
 }
 
@@ -75,11 +79,13 @@ func TestSaveOrderFunc(t *testing.T) {
 	dataChanger, ok := oStore.(*ordersStore.TestStore)
 	if !ok {
 		t.Fail()
+		return
 	}
 
 	order, ok := dataChanger.GetData()[orderID]
 	if !ok || order.Id != orderID || order.Info != "testInfo" || order.OwnerId != "testId" {
 		t.Fail()
+		return
 	}
 }
 
@@ -89,12 +95,14 @@ func TestGetOrdersFunc(t *testing.T) {
 	dataChanger, ok := oStore.(*ordersStore.TestStore)
 	if !ok {
 		t.Fail()
+		return
 	}
 	dataChanger.SetData(make(map[string]models.Order))
 
 	orders, _ := getOrdersForUser(oStore, "testUser")
 	if len(orders) != 0 {
 		t.Fail()
+		return
 	}
 
 	dataChanger.SetData(map[string]models.Order{
@@ -110,6 +118,6 @@ func TestGetOrdersFunc(t *testing.T) {
 	if len(orders) != 1 || orders[0].Id != "testId" || orders[0].OwnerId != "testUser" ||
 		orders[0].Info != "testInfo" || orders[0].Date != "testDate" {
 		t.Fail()
+		return
 	}
-
 }

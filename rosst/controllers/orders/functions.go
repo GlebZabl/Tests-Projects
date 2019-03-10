@@ -1,11 +1,12 @@
 package orders
 
 import (
+	"time"
+
 	"Tests-Projects/rosst/envirement/models"
 	"Tests-Projects/rosst/envirement/services/idStore"
 	"Tests-Projects/rosst/envirement/services/ordersStore"
 	"Tests-Projects/rosst/envirement/services/usersStore"
-	"time"
 )
 
 func checkOrCreateUserByMail(iStore idStore.IdStore, uStore usersStore.UsersStore, mail string) (string, error) {

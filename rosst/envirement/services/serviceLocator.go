@@ -12,7 +12,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-const defaultLoggerKey = "console"
+const defaultLoggerKey = logger.ConsolePrinterName
 
 var (
 	locator = ServiceLocator{}
@@ -81,14 +81,18 @@ func InitServices(config config.ConfOptions) error {
 	return nil
 }
 
-//for tests only!
-func SetTestEnv() {
+func InitTestEnv(config config.ConfOptions) error {
 	iStore := idStore.NewTestStore()
 	uStore := usersStore.NewTestStore()
 	oStore := ordersStore.NewTestStore()
+	log := logger.NewLogger(config.LoggerKey)
 	locator = ServiceLocator{
-		os: oStore,
-		us: uStore,
-		is: iStore,
+		os:  oStore,
+		us:  uStore,
+		is:  iStore,
+		l:   log,
+		cfg: config,
 	}
+
+	return nil
 }

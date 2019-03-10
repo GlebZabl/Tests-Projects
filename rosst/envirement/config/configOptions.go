@@ -1,10 +1,12 @@
 package config
 
 import (
-	"Tests-Projects/rosst/envirement/errors"
 	"encoding/json"
 	"io/ioutil"
 	"strconv"
+
+	"Tests-Projects/rosst/envirement/errors"
+	"Tests-Projects/rosst/envirement/services/logger"
 )
 
 type ConfOptions struct {
@@ -12,6 +14,7 @@ type ConfOptions struct {
 	DbOptions          dbOptions `json:"db_options"`
 	Port               string    `json:"port"`
 	TimeOutOfRemoteReq int       `json:"time_out_of_remote_req"`
+	IsTestEnv          bool      `json:"is_test_env"`
 }
 
 type dbOptions struct {
@@ -20,7 +23,7 @@ type dbOptions struct {
 }
 
 func (c *ConfOptions) Validate() string {
-	if !(c.LoggerKey == "console" || c.LoggerKey == "file" || c.LoggerKey == "full") {
+	if !(c.LoggerKey == logger.ConsolePrinterName || c.LoggerKey == logger.FilePrinterName || c.LoggerKey == logger.FullPrinterName) {
 		return "invalid config parameter : logger"
 	}
 

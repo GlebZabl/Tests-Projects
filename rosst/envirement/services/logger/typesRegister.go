@@ -1,16 +1,16 @@
 package logger
 
 const (
-	filePrinterName    = "file"
-	consolePrinterName = "console"
-	fullPrinterName    = "full"
+	FilePrinterName    = "file"
+	ConsolePrinterName = "console"
+	FullPrinterName    = "full"
 )
 
 var (
 	typesMap = map[string]func() printer{
-		filePrinterName:    newFilePrinter,
-		consolePrinterName: newConsolePrinter,
-		fullPrinterName:    newFullPrinter,
+		FilePrinterName:    newFilePrinter,
+		ConsolePrinterName: newConsolePrinter,
+		FullPrinterName:    newFullPrinter,
 	}
 )
 

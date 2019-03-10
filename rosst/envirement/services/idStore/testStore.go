@@ -2,6 +2,7 @@ package idStore
 
 import (
 	"Tests-Projects/rosst/envirement/errors"
+
 	"github.com/satori/go.uuid"
 )
 

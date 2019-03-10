@@ -1,9 +1,10 @@
 package logger
 
 import (
-	"Tests-Projects/rosst/envirement/errors"
 	"fmt"
 	"time"
+
+	"Tests-Projects/rosst/envirement/errors"
 )
 
 const logFilePath = "./logs.txt"

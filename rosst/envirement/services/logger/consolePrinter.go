@@ -1,8 +1,9 @@
 package logger
 
 import (
-	"Tests-Projects/rosst/envirement/errors"
 	"fmt"
+
+	"Tests-Projects/rosst/envirement/errors"
 )
 
 type consolePrinter struct {

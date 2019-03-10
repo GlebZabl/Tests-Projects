@@ -16,13 +16,13 @@ type order struct {
 	Date      string `json:"date"`
 }
 
-func ConverToGetOrdersResponse(orders []*models.Order) []order {
+func ConvertToGetOrdersResponse(orders []*models.Order) []order {
 	result := make([]order, 0, len(orders))
-	for _, o := range orders {
+	for i := range orders {
 		result = append(result, order{
-			OrderId:   o.Id,
-			OrderInfo: o.Id,
-			Date:      o.Date,
+			OrderId:   orders[i].Id,
+			OrderInfo: orders[i].Info,
+			Date:      orders[i].Date,
 		})
 	}
 	return result

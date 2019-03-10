@@ -37,7 +37,7 @@ func (r *remoteStore) GetNewId() (string, error) {
 
 func NewRemoteStore(timeOut int) IdStore {
 	defaultTransport := http.DefaultTransport.(*http.Transport)
-	defaultTransport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	defaultTransport.TLSClientConfig = &tls.Config{InsecureSkipVerify: false}
 
 	client := http.Client{
 		Transport: defaultTransport,

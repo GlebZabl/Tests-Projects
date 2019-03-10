@@ -64,6 +64,6 @@ func GetOrders(env *services.ServiceLocator, req requests.Request, response resp
 	}
 
 	response.SetData(responses.GetOrders{
-		Orders: responses.ConverToGetOrdersResponse(orders),
+		Orders: responses.ConvertToGetOrdersResponse(orders),
 	})
 }
